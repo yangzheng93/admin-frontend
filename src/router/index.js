@@ -3,10 +3,12 @@ import { useUserInfo } from "@stores/user";
 import qs from "qs";
 import routes from "./routes";
 
+const { parse, stringify } = qs;
+
 const router = createRouter({
   history: createWebHistory("/mes/"),
-  parseQuery: qs.parse,
-  stringifyQuery: qs.stringify,
+  parseQuery: parse,
+  stringifyQuery: stringify,
   routes,
 });
 
