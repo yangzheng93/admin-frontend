@@ -17,19 +17,20 @@ const router = createRouter({
  * 2.
  */
 router.beforeEach((to, from, next) => {
-  const whites = ["PAGE-NOAUTH", "SYSTEM-LOGIN"];
-  if (whites.includes(to.name)) {
-    next();
-    return;
-  }
+  next()
+  // const whites = ["PAGE-NOAUTH", "SYSTEM-LOGIN"];
+  // if (whites.includes(to.name)) {
+  //   next();
+  //   return;
+  // }
 
-  const { token } = useUserInfo();
-  // 如果存在 token 或者是白名单路由则直接跳转
-  if (token) {
-    next();
-  } else {
-    next({ name: "SYSTEM-LOGIN" });
-  }
+  // const { token } = useUserInfo();
+  // // 如果存在 token 或者是白名单路由则直接跳转
+  // if (token) {
+  //   next();
+  // } else {
+  //   next({ name: "SYSTEM-LOGIN" });
+  // }
 });
 
 export default router;

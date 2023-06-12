@@ -4,7 +4,6 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import Components from "unplugin-vue-components/vite";
 import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
-import Unocss from "unocss/vite";
 import ViteEslintPlugin from "vite-plugin-eslint";
 
 function resolve(dir) {
@@ -18,7 +17,6 @@ export default defineConfig({
   plugins: [
     vue(),
     Components({ resolvers: [NaiveUiResolver()] }),
-    Unocss(),
     ViteEslintPlugin(),
   ],
   resolve: {

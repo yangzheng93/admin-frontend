@@ -25,6 +25,11 @@ export default {
 };
 </script>
 
+<style>
+@import "./styles/tailwind.css";
+</style>
+
 <style lang="less">
 @import "./styles/reset.less";
 </style>
+
