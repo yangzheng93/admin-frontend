@@ -1,13 +1,13 @@
 export default [
-  { path: "/", redirect: "/dashboard/workbench" },
+  { path: "/", redirect: "/home/workbench" },
   {
-    path: "/login",
+    path: "/system/login",
     name: "SYSTEM-LOGIN",
     component: () => import("@/views/system/login/index.vue"),
     meta: { layout: "blank" },
   },
   {
-    path: "/home",
+    path: "/home/workbench",
     name: "HOME-WORKBENCH",
     component: () => import("@/views/home/workbench/index.vue"),
     meta: { layout: "basic" },

@@ -24,6 +24,7 @@ export default defineConfig({
       "@": resolve("./src/"),
       "@views": resolve("./src/views/"),
       "@components": resolve("./src/components/"),
+      "@composables": resolve("./src/composables/"),
       "@layouts": resolve("./src/layouts/"),
       "@stores": resolve("./src/stores/"),
       "@services": resolve("./src/services/"),

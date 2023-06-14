@@ -6,7 +6,7 @@ import routes from "./routes";
 const { parse, stringify } = qs;
 
 const router = createRouter({
-  history: createWebHistory("/mes/"),
+  history: createWebHistory("/"),
   parseQuery: parse,
   stringifyQuery: stringify,
   routes,
@@ -17,7 +17,7 @@ const router = createRouter({
  * 2.
  */
 router.beforeEach((to, from, next) => {
-  next()
+  next();
   // const whites = ["PAGE-NOAUTH", "SYSTEM-LOGIN"];
   // if (whites.includes(to.name)) {
   //   next();

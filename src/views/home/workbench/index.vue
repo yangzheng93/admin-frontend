@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-index">登录页</div>
+  <div class="home-workbench">workbench</div>
 </template>
 
 <script>

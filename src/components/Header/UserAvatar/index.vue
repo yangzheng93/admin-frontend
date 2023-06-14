@@ -6,17 +6,18 @@
     @on-select="onDropdownSelect"
   >
     <div class="flex cursor-pointer items-center">
-      <n-avatar :size="32" :style="{ backgroundColor: '#18a058' }">
+      <n-avatar round :size="32" :style="{ backgroundColor: '#18a058' }">
         YZ
       </n-avatar>
-      <!-- <span class="color-[#333639] ml-[6px] text-[16px]">YangZheng</span> -->
     </div>
   </n-dropdown>
+
+  <!-- 修改密码 -->
+  <n-modal v-model:show="visiblePwd"> 123 </n-modal>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { router } from "vue-router";
+import { reactive, ref } from "vue";
 
 const dropdowns = ref([
   { label: "用户中心", key: "user-center" },
@@ -25,8 +26,12 @@ const dropdowns = ref([
   { label: "退出登录", key: "logout" },
 ]);
 
+const visiblePwd = ref(false);
+
 const onDropdownSelect = (key) => {
-  if (key === "user-center") {
+  console.log(key);
+  if (key === "edit-password") {
+    visiblePwd.value = true;
   }
 };
 </script>
