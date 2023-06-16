@@ -6,4 +6,10 @@ import { createPinia } from "pinia";
 const root = createApp(app);
 root.use(router);
 root.use(createPinia());
+
+// ref: https://www.naiveui.com/zh-CN/os-theme/docs/style-conflict
+const meta = document.createElement("meta");
+meta.name = "naive-ui-style";
+document.head.appendChild(meta);
+
 root.mount("#app");

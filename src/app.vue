@@ -1,7 +1,9 @@
 <template>
-  <component :is="layouts[layout]">
-    <router-view />
-  </component>
+  <n-message-provider>
+    <component :is="layouts[layout]">
+      <router-view />
+    </component>
+  </n-message-provider>
 </template>
 
 <script>
@@ -26,10 +28,11 @@ export default {
 </script>
 
 <style>
-@import "./styles/tailwind.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 </style>
 
 <style lang="less">
 @import "./styles/reset.less";
 </style>
-
