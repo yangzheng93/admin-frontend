@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-blank">
+  <div class="h-full">
     <slot />
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <n-layout has-sider class="h-full">
-    <n-layout-sider :width="180" bordered show-trigger collapse-mode="width">
+    <n-layout-sider :width="220" bordered show-trigger collapse-mode="width">
       <n-menu :options="menus" />
     </n-layout-sider>
     <n-layout>
@@ -30,20 +30,30 @@ import HeaderUserAvatar from "@components/Header/UserAvatar/index.vue";
 import MessageCenter from "@components/Header/MessageCenter/index.vue";
 import useIconRender from "@composables/icon";
 import useRouterRender from "@composables/router";
-import { Cogs } from "@vicons/fa";
+import { Cogs, ShieldAlt, Users } from "@vicons/fa";
+import { ApartmentOutlined } from "@vicons/antd";
 
 const menus = ref([
   {
-    label: "基础管理",
-    key: "BASIC-MANAGEMENT",
+    label: "系统管理",
+    key: "SYSTEM-MANAGEMENT",
     icon: useIconRender(Cogs),
     children: [
+      {
+        label: useRouterRender(
+          { to: { name: "MANAGEMENT-PERMISSION" } },
+          "角色与权限",
+        ),
+        key: "MANAGEMENT-PERMISSION",
+        icon: useIconRender(ShieldAlt),
+      },
       {
         label: useRouterRender(
           { to: { name: "MANAGEMENT-DEPARTMENT" } },
           "部门管理",
         ),
         key: "MANAGEMENT-DEPARTMENT",
+        icon: useIconRender(ApartmentOutlined),
       },
       {
         label: useRouterRender(
@@ -51,13 +61,7 @@ const menus = ref([
           "用户管理",
         ),
         key: "MANAGEMENT-ACCOUNT",
-      },
-      {
-        label: useRouterRender(
-          { to: { name: "MANAGEMENT-PERMISSION" } },
-          "权限管理",
-        ),
-        key: "MANAGEMENT-PERMISSION",
+        icon: useIconRender(Users),
       },
     ],
   },

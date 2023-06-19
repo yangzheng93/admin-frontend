@@ -1,5 +1,5 @@
 export default [
-  { path: "/", redirect: "/home/workbench" },
+  { path: "/", redirect: "/system/login" },
   {
     path: "/system/login",
     name: "SYSTEM-LOGIN",

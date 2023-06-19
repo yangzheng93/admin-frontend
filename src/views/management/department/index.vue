@@ -1,7 +1,7 @@
 <template>
   <div class="management-department">
     <n-card>
-      <n-space class="mb-[10px]">
+      <n-space class="mb-[20px]">
         <n-button type="primary" @click="visible = true">新 建</n-button>
       </n-space>
       <n-data-table :columns="columns" :data="[]" />

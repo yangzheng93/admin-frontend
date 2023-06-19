@@ -19,8 +19,7 @@
     </div>
   </n-dropdown>
 
-  <!-- 修改密码 -->
-  <n-modal
+  <!-- <n-modal
     :show="visiblePwd"
     preset="dialog"
     positive-text="确 定"
@@ -59,48 +58,28 @@
         />
       </n-form-item>
     </n-form>
-  </n-modal>
+  </n-modal> -->
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useMessage } from "naive-ui";
 import useIconRender from "@composables/icon";
 import { UserTie } from "@vicons/fa";
 
 const IconUser = useIconRender(UserTie, { size: 18 });
 
-const message = useMessage();
-
 const router = useRouter();
 
 const dropdowns = ref([
-  { label: "用户中心", key: "user-center" },
-  { label: "修改密码", key: "edit-password" },
+  { label: "用户中心", key: "ACCOUNT-CENTER" },
   { type: "divider", key: "divider" },
-  { label: "退出登录", key: "logout" },
+  { label: "退出登录", key: "SYSTEM-LOGOUT" },
 ]);
 
-const visiblePwd = ref(false);
 const onDropdownSelect = (key) => {
-  if (key === "edit-password") {
-    visiblePwd.value = true;
-  } else {
+  if (key === "ACCOUNT-CENTER") {
     router.push({ name: "ACCOUNT-CENTER" });
   }
-};
-
-const formRef = ref(null);
-const formData = reactive({ oldPwd: "", newPwd: "", confirmPwd: "" });
-const toClose = () => (visiblePwd.value = false);
-const toSave = () => {
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      message.success("Valid");
-    } else {
-      message.error("Invalid");
-    }
-  });
 };
 </script>
