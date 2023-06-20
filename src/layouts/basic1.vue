@@ -1,19 +1,20 @@
 <template>
-  <n-layout has-sider class="h-full">
-    <n-layout-sider :width="220" bordered show-trigger collapse-mode="width">
+  <n-layout class="h-full">
+    <!-- <n-layout-sider bordered show-trigger collapse-mode="width">
       <n-menu :options="menus" />
-    </n-layout-sider>
-    <n-layout>
-      <n-layout-header bordered class="h-[64px] pl-[20px] pr-[20px]">
-        <n-space align="center" justify="space-between" class="h-full w-full">
-          <HeaderBrand />
-          <n-space :size="18" align="center">
-            <MessageCenter />
-            <n-divider vertical class="!m-0 !h-[28px]" />
-            <HeaderUserAvatar />
-          </n-space>
+    </n-layout-sider> -->
+    <n-layout-header bordered class="h-[64px] pl-[20px] pr-[20px]">
+      <n-space align="center" justify="space-between" class="h-full w-full">
+        <HeaderBrand />
+        <n-menu mode="horizontal" :options="menus" />
+        <n-space :size="18" align="center">
+          <MessageCenter />
+          <n-divider vertical class="!m-0 !h-[28px]" />
+          <HeaderUserAvatar />
         </n-space>
-      </n-layout-header>
+      </n-space>
+    </n-layout-header>
+    <n-layout>
       <n-layout-content class="m-[16px]">
         <div class="h-full">
           <slot />
@@ -58,7 +59,7 @@ const menus = ref([
       {
         label: useRouterRender(
           { to: { name: "MANAGEMENT-ACCOUNT" } },
-          "用户管理",
+          "企业通讯录管理",
         ),
         key: "MANAGEMENT-ACCOUNT",
         icon: useIconRender(Users),

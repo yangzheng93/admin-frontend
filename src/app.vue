@@ -19,7 +19,7 @@ export default {
     return {
       layout,
       layouts: {
-        basic: defineAsyncComponent(() => import("@layouts/basic.vue")),
+        basic: defineAsyncComponent(() => import("@layouts/basic2.vue")),
         blank: defineAsyncComponent(() => import("@layouts/blank.vue")),
       },
     };

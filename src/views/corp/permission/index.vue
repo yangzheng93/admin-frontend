@@ -1,14 +1,13 @@
 <template>
-  <div class="management-permission">
-    <n-card>
-      <n-space :size="20">
+  <div class="corp-permission">
+    <n-space justify="center" :size="20">
+      <n-card :content-style="{ width: '300px' }">
         <n-space :size="20" vertical>
-          <n-space :size="20">
+          <n-space justify="space-between">
             <n-input
               v-model:value="keyOfRole"
               type="text"
               placeholder="搜索角色"
-              class="w-[120px]"
             >
               <template #prefix>
                 <n-icon :size="16">
@@ -34,15 +33,16 @@
             </n-button>
           </n-button-group>
         </n-space>
-        <n-divider vertical class="!h-full" />
-        <n-tabs type="line" animated>
+      </n-card>
+      <n-card :content-style="{ width: '600px' }">
+        <n-tabs type="line">
           <n-tab-pane name="USER" tab="角色成员管理"> Wonderwall </n-tab-pane>
           <n-tab-pane name="PERMISSION" tab="角色权限配置">
             Hey Jude
           </n-tab-pane>
         </n-tabs>
-      </n-space>
-    </n-card>
+      </n-card>
+    </n-space>
   </div>
 </template>
 
@@ -51,7 +51,7 @@ import { computed, ref } from "vue";
 import { SearchOutlined, PlusOutlined } from "@vicons/antd";
 
 export default {
-  name: "ManagementPermission",
+  name: "CorpPermission",
   components: { SearchOutlined, PlusOutlined },
   setup() {
     const keyOfRole = ref("");

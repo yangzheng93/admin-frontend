@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { useUserInfo } from "@stores/user";
+// import { useUserInfo } from "@stores/user";
 import qs from "qs";
-import routes from "./routes";
+import AccountModuleRoutes from "@views/account/routes";
+import HomeModuleRoutes from "@views/home/routes";
+import CorpModuleRoutes from "@views/corp/routes";
+import CustomerModuleRoutes from "@views/customer/routes";
 
 const { parse, stringify } = qs;
 
@@ -9,7 +12,19 @@ const router = createRouter({
   history: createWebHistory("/"),
   parseQuery: parse,
   stringifyQuery: stringify,
-  routes,
+  routes: [
+    { path: "/", redirect: "/system/login" },
+    {
+      path: "/system/login",
+      name: "SYSTEM-LOGIN",
+      component: () => import("@/views/system/login/index.vue"),
+      meta: { layout: "blank" },
+    },
+    ...AccountModuleRoutes,
+    ...HomeModuleRoutes,
+    ...CorpModuleRoutes,
+    ...CustomerModuleRoutes,
+  ],
 });
 
 /**

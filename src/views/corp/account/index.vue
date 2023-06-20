@@ -1,5 +1,5 @@
 <template>
-  <div class="management-account">
+  <div class="corp-account">
     <n-card>
       <n-space class="mb-[20px]">
         <n-button type="primary" @click="visible = true">新 建</n-button>
@@ -76,7 +76,7 @@
 import { reactive, ref } from "vue";
 
 export default {
-  name: "ManagementAccount",
+  name: "CorpAccount",
   setup() {
     const visible = ref(false);
 

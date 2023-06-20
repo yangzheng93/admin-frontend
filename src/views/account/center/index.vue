@@ -14,9 +14,19 @@
           </n-button>
         </n-button-group>
       </n-card>
-
-      <UserForm v-if="actived === 'USERINFO'" />
-      <PwdForm v-if="actived === 'PASSWORD'" />
+      <n-card
+        :title="
+          actived === 'USERINFO'
+            ? '个人信息'
+            : actived === 'PASSWORD'
+            ? '账号密码'
+            : ''
+        "
+        :content-style="{ width: '600px' }"
+      >
+        <UserForm v-if="actived === 'USERINFO'" />
+        <PwdForm v-if="actived === 'PASSWORD'" />
+      </n-card>
     </n-space>
   </div>
 </template>

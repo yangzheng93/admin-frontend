@@ -1,10 +1,24 @@
 <template>
-  <div class="management-department">
+  <div class="customer-account">
     <n-card>
       <n-space class="mb-[20px]">
         <n-button type="primary" @click="visible = true">新 建</n-button>
       </n-space>
-      <n-data-table :columns="columns" :data="[]" />
+      <n-data-table
+        :columns="columns"
+        :data="[
+          {
+            username: 'xxxxx',
+            gender: '男',
+            phone: '138xxxxxxxx',
+            department: '仓库A',
+            roles: [],
+            created_at: '2023-06-19',
+          },
+        ]"
+        :single-line="false"
+        size="small"
+      />
     </n-card>
 
     <n-modal
@@ -62,15 +76,17 @@
 import { reactive, ref } from "vue";
 
 export default {
-  name: "ManagementDepartment",
+  name: "CustomerAccount",
   setup() {
     const visible = ref(false);
 
     const columns = ref([
-      { title: "部门编号", key: "code" },
-      { title: "部门名称", key: "name" },
-      { title: "负责人", key: "leader" },
-      { title: "创建时间", key: "created_at" },
+      { title: "客户名称", key: "name", minWidth: 160, align: "center" },
+      { title: "联系人", key: "contact", minWidth: 80, align: "center" },
+      { title: "联系电话", key: "phone", minWidth: 180, align: "center" },
+      { title: "送货地址", key: "address", minWidth: 200, align: "center" },
+      { title: "角色", key: "roles", minWidth: 200, align: "center" },
+      { title: "创建时间", key: "created_at", minWidth: 120, align: "center" },
     ]);
 
     const formRef = ref(null);
