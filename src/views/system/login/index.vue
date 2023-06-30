@@ -8,9 +8,9 @@
             ref="formRef"
             :model="formData"
             :rules="{
-              username: {
+              phone: {
                 required: true,
-                message: '请输入用户名或手机号',
+                message: '请输入手机号',
                 trigger: 'blur',
               },
               password: {
@@ -21,11 +21,11 @@
             }"
             :show-label="false"
           >
-            <n-form-item path="username">
+            <n-form-item path="phone">
               <n-input
-                v-model:value="formData.username"
+                v-model:value="formData.phone"
                 size="large"
-                placeholder="请输入用户名或手机号"
+                placeholder="请输入手机号"
               >
                 <template #prefix>
                   <n-icon :size="16">
@@ -63,6 +63,7 @@
 import { reactive, ref } from "vue";
 import { LockOutlined, UserOutlined } from "@vicons/antd";
 import { useMessage } from "naive-ui";
+import { API_LOGIN } from "@services/auth";
 
 export default {
   name: "SystemLogin",
@@ -72,18 +73,20 @@ export default {
 
     const formRef = ref(null);
 
-    const formData = reactive({ username: "", password: "" });
+    const formData = reactive({ phone: "", password: "" });
 
     return { message, formRef, formData };
   },
   methods: {
     toLogin() {
       this.$refs["formRef"]?.validate((errors) => {
-        console.log(errors);
         if (!errors) {
-          this.message.success("Valid");
-        } else {
-          this.message.error("Invalid");
+          API_LOGIN({
+            phone: this.formData.phone,
+            password: this.formData.password,
+          }).then((res) => {
+            console.log(res);
+          });
         }
       });
     },

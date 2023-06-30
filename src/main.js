@@ -13,3 +13,7 @@ meta.name = "naive-ui-style";
 document.head.appendChild(meta);
 
 root.mount("#app");
+
+if (window && !window.MESADMIN_VUE_INSTANCE) {
+  window.MESADMIN_VUE_INSTANCE = root;
+}

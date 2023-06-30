@@ -35,12 +35,11 @@ export default defineConfig({
     },
   },
   server: {
-    // host: "emes.local.com",
     port: 9999,
     open: true,
     // proxy: {
-    //   "/api": {
-    //     target: "",
+    //   "/mes-v1": {
+    //     target: "http://localhost:3000",
     //     changeOrigin: true,
     //   },
     // },

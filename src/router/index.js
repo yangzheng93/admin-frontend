@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 // import { useUserInfo } from "@stores/user";
 import qs from "qs";
-import AccountModuleRoutes from "@views/account/routes";
+import SystemModuleRoutes from "@views/system/routes";
 import HomeModuleRoutes from "@views/home/routes";
+import AccountModuleRoutes from "@views/account/routes";
 import CorpModuleRoutes from "@views/corp/routes";
 import CustomerModuleRoutes from "@views/customer/routes";
 
@@ -14,14 +15,9 @@ const router = createRouter({
   stringifyQuery: stringify,
   routes: [
     { path: "/", redirect: "/system/login" },
-    {
-      path: "/system/login",
-      name: "SYSTEM-LOGIN",
-      component: () => import("@/views/system/login/index.vue"),
-      meta: { layout: "blank" },
-    },
-    ...AccountModuleRoutes,
+    ...SystemModuleRoutes,
     ...HomeModuleRoutes,
+    ...AccountModuleRoutes,
     ...CorpModuleRoutes,
     ...CustomerModuleRoutes,
   ],
