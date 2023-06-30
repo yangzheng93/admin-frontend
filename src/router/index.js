@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import { useUserInfo } from "@stores/user";
+// import { useUserStore } from "@stores/user";
 import qs from "qs";
 import SystemModuleRoutes from "@views/system/routes";
 import HomeModuleRoutes from "@views/home/routes";
@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
   //   return;
   // }
 
-  // const { token } = useUserInfo();
+  // const { token } = useUserStore();
   // // 如果存在 token 或者是白名单路由则直接跳转
   // if (token) {
   //   next();

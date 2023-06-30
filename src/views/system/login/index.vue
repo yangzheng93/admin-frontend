@@ -63,6 +63,7 @@
 import { reactive, ref } from "vue";
 import { LockOutlined, UserOutlined } from "@vicons/antd";
 import { useMessage } from "naive-ui";
+import { useUserStore } from "@stores/user";
 import { API_LOGIN } from "@services/auth";
 
 export default {
@@ -71,11 +72,13 @@ export default {
   setup() {
     const message = useMessage();
 
+    const userStore = useUserStore();
+
     const formRef = ref(null);
 
     const formData = reactive({ phone: "", password: "" });
 
-    return { message, formRef, formData };
+    return { message, userStore, formRef, formData };
   },
   methods: {
     toLogin() {
@@ -84,8 +87,10 @@ export default {
           API_LOGIN({
             phone: this.formData.phone,
             password: this.formData.password,
-          }).then((res) => {
-            console.log(res);
+          }).then(({ token, user }) => {
+            this.userStore.setToken(token);
+            this.userStore.setUser(user);
+            this.$router.push({ name: "HOME-WORKBENCH" });
           });
         }
       });

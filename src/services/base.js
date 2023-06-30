@@ -1,7 +1,7 @@
 /** @format */
 
 import axios from "axios";
-import { useUserInfo } from "@stores/user";
+import { useUserStore } from "@stores/user";
 import { createDiscreteApi } from "naive-ui";
 
 const { message: NMessage, dialog: NDialog } = createDiscreteApi([
@@ -9,7 +9,7 @@ const { message: NMessage, dialog: NDialog } = createDiscreteApi([
   "dialog",
 ]);
 
-const userInfo = useUserInfo();
+const userStore = useUserStore();
 
 const showDialog = (content) => {
   NDialog.error({
@@ -29,8 +29,8 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
-    if (userInfo.token) {
-      config.headers["Authorization"] = `Bearer ${userInfo.token}`;
+    if (userStore.token) {
+      config.headers["Authorization"] = `Bearer ${userStore.token}`;
     }
 
     return config;
@@ -51,11 +51,13 @@ service.interceptors.response.use(
     switch (statusCode) {
       case 401:
         NMessage.error("登录信息已失效，请重新登录");
-        userInfo.removeToken();
+        userStore.removeToken();
         window.MESADMIN_VUE_INSTANCE.$router.push({ name: "SYSTEM-LOGIN" });
         break;
       default:
-        NMessage.error(message?.[0] || "请求失败");
+        NMessage.error(
+          Array.isArray(message) ? message?.[0] : message || "请求失败",
+        );
         break;
     }
 

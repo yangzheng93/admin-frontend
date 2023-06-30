@@ -28,7 +28,7 @@ export default defineConfig({
       "@layouts": resolve("./src/layouts/"),
       "@stores": resolve("./src/stores/"),
       "@services": resolve("./src/services/"),
-      "@helps": resolve("./src/helps/"),
+      "@utils": resolve("./src/utils/"),
       "@events": resolve("./src/events/"),
       "@constants": resolve("./src/constants/"),
       "@styles": resolve("./src/styles/"),
