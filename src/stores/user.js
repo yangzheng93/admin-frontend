@@ -1,7 +1,7 @@
 /** @format */
 
 import { defineStore } from "pinia";
-import { useCookies } from "@vueuse/integrations/useCookies";
+import { getFromCookie, setToCookie, removeFromCookie } from "@utils/uCookies";
 import {
   getObjFromStorage,
   setObjToStorage,
@@ -10,25 +10,28 @@ import {
 
 const TOKEN_KEY = "MESADMIN_TOKEN";
 const USERINFO_KEY = "MESADMIN_USERINFO";
-const { get, remove, set } = useCookies([TOKEN_KEY]);
 
 export const useUserStore = defineStore("UserStore", {
   id: "UserInfo",
   state: () => ({
-    token: get(TOKEN_KEY),
+    token: getFromCookie(TOKEN_KEY),
     user: getObjFromStorage(USERINFO_KEY),
   }),
   actions: {
     setToken(v) {
-      set(TOKEN_KEY, v);
+      this.token = v;
+      setToCookie(TOKEN_KEY, v);
     },
     removeToken() {
-      remove(TOKEN_KEY);
+      this.token = undefined;
+      removeFromCookie(TOKEN_KEY);
     },
     setUser(v) {
+      this.user = v;
       setObjToStorage(USERINFO_KEY, v);
     },
     removeUser(v) {
+      this.user = undefined;
       removeFromStorage(USERINFO_KEY);
     },
   },

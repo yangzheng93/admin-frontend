@@ -65,6 +65,7 @@ import { LockOutlined, UserOutlined } from "@vicons/antd";
 import { useMessage } from "naive-ui";
 import { useUserStore } from "@stores/user";
 import { API_LOGIN } from "@services/auth";
+import { routerKey } from "vue-router";
 
 export default {
   name: "SystemLogin",
@@ -76,9 +77,14 @@ export default {
 
     const formRef = ref(null);
 
-    const formData = reactive({ phone: "", password: "" });
+    const formData = reactive({ phone: "18721393486", password: "888888" });
 
     return { message, userStore, formRef, formData };
+  },
+  created() {
+    if (this.userStore.token) {
+      this.$router.push({ name: "HOME-WORKBENCH" });
+    }
   },
   methods: {
     toLogin() {

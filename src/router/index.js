@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import { useUserStore } from "@stores/user";
+import { useUserStore } from "@stores/user";
 import qs from "qs";
 import SystemModuleRoutes from "@views/system/routes";
 import HomeModuleRoutes from "@views/home/routes";
@@ -28,20 +28,24 @@ const router = createRouter({
  * 2.
  */
 router.beforeEach((to, from, next) => {
-  next();
-  // const whites = ["PAGE-NOAUTH", "SYSTEM-LOGIN"];
-  // if (whites.includes(to.name)) {
-  //   next();
-  //   return;
-  // }
+  const { token } = useUserStore();
+  if (!token && to.name !== "SYSTEM-LOGIN") {
+    next({ name: "SYSTEM-LOGIN" });
+    return;
+  }
 
-  // const { token } = useUserStore();
-  // // 如果存在 token 或者是白名单路由则直接跳转
-  // if (token) {
-  //   next();
-  // } else {
-  //   next({ name: "SYSTEM-LOGIN" });
-  // }
+  if (token && to.name === "SYSTEM-LOGIN") {
+    next({ name: "HOME-WORKBENCH" });
+    return;
+  }
+
+  const whites = ["SYSTEM-LOGIN"];
+  if (whites.includes(to.name)) {
+    next();
+    return;
+  }
+
+  next();
 });
 
 export default router;
