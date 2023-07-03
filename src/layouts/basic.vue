@@ -58,7 +58,7 @@ const menus = ref([
         icon: useIconRender(ApartmentOutlined),
       },
       {
-        label: useRouterRender({ to: { name: "CORP-ACCOUNT" } }, "通讯录"),
+        label: useRouterRender({ to: { name: "CORP-ACCOUNT" } }, "员工管理"),
         key: "CORP-ACCOUNT",
         icon: useIconRender(Users),
       },
