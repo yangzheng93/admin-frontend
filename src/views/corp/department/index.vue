@@ -38,7 +38,7 @@
         }"
       >
         <n-form-item label="部门名称" path="name">
-          <n-input v-model:value="formData.name" placeholder="请输入部门名称" />
+          <n-input v-model:value="formData.name" placeholder="请填写部门名称" />
         </n-form-item>
         <n-form-item label="负责人" path="user_id">
           <n-select
@@ -55,19 +55,36 @@
 
 <script>
 import { h, reactive, ref } from "vue";
-import { NTime } from "naive-ui";
-import { API_GET_DEPARTMENTLIST } from "@services/department";
+import { NButton, NSpace, NTime, useMessage } from "naive-ui";
+import useIconRender from "@composables/icon";
+import { EditOutlined } from "@vicons/antd";
+import {
+  API_GET_DEPARTMENTLIST,
+  API_SAVE_DEPARTMENT,
+} from "@services/department";
 
 export default {
   name: "CorpDepartment",
   setup() {
+    const message = useMessage();
+
     const visible = ref(false);
 
     const tableLoading = ref(false);
 
     const tableColumns = ref([
       { title: "部门名称", key: "name", minWidth: 200, align: "center" },
-      { title: "负责人", key: "username", minWidth: 200, align: "center" },
+      {
+        title: "负责人",
+        key: "username",
+        minWidth: 200,
+        align: "center",
+        render: (record) => {
+          return record.username && record.phone
+            ? `${record.username}（${record.phone}）`
+            : "";
+        },
+      },
       {
         title: "创建时间",
         key: "created_at",
@@ -84,8 +101,29 @@ export default {
         title: "操作",
         key: "operation",
         align: "center",
-        minWidth: 100,
+        minWidth: 160,
         fixed: "right",
+        render: (record) => {
+          return h(NSpace, { size: 10, justify: "center" }, () => [
+            h(
+              NButton,
+              {
+                key: "EDIT",
+                text: true,
+                onClick: () => {
+                  formData.id = record.id;
+                  formData.name = record.name;
+                  formData.user_id = record.user_id;
+                  visible.value = true;
+                },
+              },
+              {
+                icon: useIconRender(EditOutlined),
+                default: () => "编辑",
+              },
+            ),
+          ]);
+        },
       },
     ]);
 
@@ -93,9 +131,10 @@ export default {
 
     const formRef = ref(null);
 
-    const formData = reactive({ name: "", leader: undefined });
+    const formData = reactive({ id: undefined, name: "", user_id: undefined });
 
     return {
+      message,
       visible,
       tableLoading,
       tableColumns,
@@ -121,13 +160,28 @@ export default {
     },
     toClose() {
       this.visible = false;
+      this.formData.id = undefined;
+      this.formData.name = "";
+      this.formData.user_id = undefined;
     },
     toSave() {
       this.$refs["formRef"]?.validate((errors) => {
         if (!errors) {
-          console.log(this.formData);
-        } else {
-          console.log(errors);
+          if (this.formData.id) {
+            console.log("编辑接口");
+          } else {
+            API_SAVE_DEPARTMENT(this.formData).then((data) => {
+              if (data.id) {
+                this.toClose();
+                this.message.success("保存成功", {
+                  duration: 1500,
+                  onAfterLeave: () => {
+                    this.fetchTableList();
+                  },
+                });
+              }
+            });
+          }
         }
       });
     },

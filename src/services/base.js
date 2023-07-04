@@ -4,12 +4,12 @@ import axios from "axios";
 import { useUserStore } from "@stores/user";
 import { createDiscreteApi } from "naive-ui";
 
+const userStore = useUserStore();
+
 const { message: NMessage, dialog: NDialog } = createDiscreteApi([
   "message",
   "dialog",
 ]);
-
-const userStore = useUserStore();
 
 const showDialog = (content) => {
   NDialog.error({

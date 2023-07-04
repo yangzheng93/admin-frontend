@@ -32,25 +32,57 @@
         :rules="{
           name: {
             required: true,
-            message: '部门名称不能为空',
+            message: '员工姓名不能为空',
             trigger: 'blur',
           },
-          code: {
+          gender: {
             required: true,
-            message: '部门编号不能为空',
+            message: '性别不能为空',
+            trigger: 'change',
+          },
+          phone: {
+            required: true,
+            message: '手机号不能为空',
             trigger: 'blur',
+          },
+          department_id: {
+            required: true,
+            type: 'number',
+            message: '所在部门不能为空',
+            trigger: 'change',
           },
         }"
       >
-        <n-form-item label="部门名称" path="name">
-          <n-input v-model:value="formData.name" placeholder="请输入部门名称" />
+        <n-form-item label="姓名" path="name">
+          <n-input v-model:value="formData.name" placeholder="请填写员工姓名" />
         </n-form-item>
-        <n-form-item label="负责人" path="user_id">
+        <n-form-item label="性别" path="gender">
           <n-select
-            v-model:value="formData.user_id"
-            :options="[]"
-            filterable
-            placeholder="请选择部门负责人"
+            v-model:value="formData.gender"
+            :options="[
+              { label: '男', value: '男' },
+              { label: '女', value: '女' },
+            ]"
+            placeholder="请选择员工性别"
+          />
+        </n-form-item>
+        <n-form-item label="手机号" path="phone">
+          <n-input
+            v-model:value="formData.phone"
+            placeholder="请填写员工手机号"
+          />
+        </n-form-item>
+        <n-form-item label="邮箱" path="email">
+          <n-input
+            v-model:value="formData.email"
+            placeholder="请填写员工内部邮箱（没有则不填）"
+          />
+        </n-form-item>
+        <n-form-item label="所属部门" path="department_id">
+          <n-select
+            v-model:value="formData.department_id"
+            :options="options.departments"
+            placeholder="请选择员工所在部门"
           />
         </n-form-item>
       </n-form>
@@ -60,19 +92,30 @@
 
 <script>
 import { h, reactive, ref } from "vue";
-import { NTime } from "naive-ui";
-import { API_GET_USERLIST } from "@services/user";
+import { NButton, NSpace, NTime, useMessage } from "naive-ui";
+import useIconRender from "@composables/icon";
+import { EditOutlined } from "@vicons/antd";
+import { API_GET_USERLIST, API_SAVE_USER } from "@services/user";
+import { API_GET_DEPARTMENTLIST } from "@services/department";
 
 export default {
   name: "CorpAccount",
   setup() {
+    const message = useMessage();
+
     const visible = ref(false);
 
     const tableLoading = ref(false);
 
     const tableColumns = ref([
-      { title: "姓名", key: "name", minWidth: 160, align: "center" },
-      { title: "性别", key: "gender", minWidth: 100, align: "center" },
+      {
+        title: "姓名",
+        key: "name",
+        minWidth: 160,
+        align: "center",
+        fixed: "left",
+      },
+      { title: "性别", key: "gender", minWidth: 160, align: "center" },
       { title: "手机号", key: "phone", minWidth: 160, align: "center" },
       {
         title: "所属部门",
@@ -81,18 +124,9 @@ export default {
         align: "center",
       },
       {
-        title: "角色",
-        key: "role_names",
-        minWidth: 300,
-        align: "center",
-        render: (record) => {
-          return record.role_names?.join("、");
-        },
-      },
-      {
         title: "创建时间",
         key: "created_at",
-        minWidth: 160,
+        minWidth: 200,
         align: "center",
         render: (record) => {
           return h(NTime, {
@@ -105,30 +139,79 @@ export default {
         title: "操作",
         key: "operation",
         align: "center",
-        minWidth: 100,
+        minWidth: 160,
         fixed: "right",
+        render: (record) => {
+          return h(NSpace, { size: 10, justify: "center" }, () => [
+            h(
+              NButton,
+              {
+                key: "EDIT",
+                text: true,
+                onClick: () => {
+                  formData.id = record.id;
+                  formData.name = record.name;
+                  formData.user_id = record.user_id;
+                  visible.value = true;
+                },
+              },
+              {
+                icon: useIconRender(EditOutlined),
+                default: () => "编辑",
+              },
+            ),
+          ]);
+        },
       },
     ]);
 
     const tableData = ref([]);
 
+    const options = reactive({ departments: [] });
+
     const formRef = ref(null);
 
-    const formData = reactive({ name: "", user_id: undefined });
+    // 初始化 formData
+    const initialFormData = {
+      id: undefined,
+      name: "",
+      gender: undefined,
+      phone: "",
+      email: undefined,
+      department_id: undefined,
+    };
+
+    const formData = reactive({ ...initialFormData });
+
+    const resetFormData = () => {
+      Object.assign(formData, { ...initialFormData });
+    };
 
     return {
+      message,
       visible,
       tableLoading,
       tableColumns,
       tableData,
+      options,
       formRef,
       formData,
+      resetFormData,
     };
   },
   created() {
+    this.initOptions();
     this.fetchTableList();
   },
   methods: {
+    initOptions() {
+      Promise.all([API_GET_DEPARTMENTLIST()]).then(([list]) => {
+        this.options.departments = list.map((i) => ({
+          label: i.name,
+          value: i.id,
+        }));
+      });
+    },
     fetchTableList() {
       this.tableLoading = true;
       API_GET_USERLIST()
@@ -142,14 +225,22 @@ export default {
     },
     toClose() {
       this.visible = false;
-      this.formData = { name: "", user_id: undefined };
+      this.resetFormData();
     },
     toSave() {
       this.$refs["formRef"]?.validate((errors) => {
         if (!errors) {
-          console.log(this.formData);
-        } else {
-          console.log(errors);
+          API_SAVE_USER(this.formData).then((data) => {
+            if (data.id) {
+              this.toClose();
+              this.message.success("保存成功", {
+                duration: 1500,
+                onAfterLeave: () => {
+                  this.fetchTableList();
+                },
+              });
+            }
+          });
         }
       });
     },

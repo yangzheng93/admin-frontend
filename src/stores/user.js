@@ -30,7 +30,7 @@ export const useUserStore = defineStore("UserStore", {
       this.user = v;
       setObjToStorage(USERINFO_KEY, v);
     },
-    removeUser(v) {
+    removeUser() {
       this.user = undefined;
       removeFromStorage(USERINFO_KEY);
     },

@@ -94,9 +94,14 @@ export default {
             phone: this.formData.phone,
             password: this.formData.password,
           }).then(({ token, user }) => {
-            this.userStore.setToken(token);
-            this.userStore.setUser(user);
-            this.$router.push({ name: "HOME-WORKBENCH" });
+            this.message.success("登录成功", {
+              duration: 1000,
+              onAfterLeave: () => {
+                this.userStore.setToken(token);
+                this.userStore.setUser(user);
+                this.$router.push({ name: "HOME-WORKBENCH" });
+              },
+            });
           });
         }
       });

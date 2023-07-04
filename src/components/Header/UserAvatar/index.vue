@@ -15,7 +15,7 @@
       >
         <IconUser />
       </n-avatar>
-      某某某
+      {{ userStore?.user?.name }}
     </div>
   </n-dropdown>
 
@@ -64,12 +64,11 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@stores/user";
 import useIconRender from "@composables/icon";
 import { UserTie } from "@vicons/fa";
 
 const IconUser = useIconRender(UserTie, { size: 18 });
-
-const router = useRouter();
 
 const dropdowns = ref([
   { label: "用户中心", key: "ACCOUNT-CENTER" },
@@ -77,9 +76,13 @@ const dropdowns = ref([
   { label: "退出登录", key: "SYSTEM-LOGOUT" },
 ]);
 
+const router = useRouter();
+
 const onDropdownSelect = (key) => {
   if (key === "ACCOUNT-CENTER") {
     router.push({ name: "ACCOUNT-CENTER" });
   }
 };
+
+const userStore = useUserStore();
 </script>
