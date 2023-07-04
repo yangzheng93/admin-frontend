@@ -43,8 +43,10 @@
         <n-form-item label="负责人" path="user_id">
           <n-select
             v-model:value="formData.user_id"
-            :options="[]"
+            :options="options.users"
             filterable
+            label-field="name"
+            value-field="id"
             placeholder="请选择部门负责人"
           />
         </n-form-item>
@@ -62,6 +64,7 @@ import {
   API_GET_DEPARTMENTLIST,
   API_SAVE_DEPARTMENT,
 } from "@services/department";
+import { API_GET_USERSIMPLELIST } from "@services/user";
 
 export default {
   name: "CorpDepartment",
@@ -76,12 +79,12 @@ export default {
       { title: "部门名称", key: "name", minWidth: 200, align: "center" },
       {
         title: "负责人",
-        key: "username",
+        key: "user_name",
         minWidth: 200,
         align: "center",
         render: (record) => {
-          return record.username && record.phone
-            ? `${record.username}（${record.phone}）`
+          return record.user_name && record.user_phone
+            ? `${record.user_name}（${record.user_phone}）`
             : "";
         },
       },
@@ -129,9 +132,22 @@ export default {
 
     const tableData = ref([]);
 
+    const options = reactive({ users: [] });
+
     const formRef = ref(null);
 
-    const formData = reactive({ id: undefined, name: "", user_id: undefined });
+    // 初始化 formData
+    const initialFormData = {
+      id: undefined,
+      name: "",
+      user_id: undefined,
+    };
+
+    const formData = reactive({ ...initialFormData });
+
+    const resetFormData = () => {
+      Object.assign(formData, { ...initialFormData });
+    };
 
     return {
       message,
@@ -139,14 +155,22 @@ export default {
       tableLoading,
       tableColumns,
       tableData,
+      options,
       formRef,
       formData,
+      resetFormData,
     };
   },
   created() {
+    this.initOptions();
     this.fetchTableList();
   },
   methods: {
+    initOptions() {
+      Promise.all([API_GET_USERSIMPLELIST()]).then(([list]) => {
+        this.options.users = list;
+      });
+    },
     fetchTableList() {
       this.tableLoading = true;
       API_GET_DEPARTMENTLIST()
@@ -160,28 +184,22 @@ export default {
     },
     toClose() {
       this.visible = false;
-      this.formData.id = undefined;
-      this.formData.name = "";
-      this.formData.user_id = undefined;
+      this.resetFormData();
     },
     toSave() {
       this.$refs["formRef"]?.validate((errors) => {
         if (!errors) {
-          if (this.formData.id) {
-            console.log("编辑接口");
-          } else {
-            API_SAVE_DEPARTMENT(this.formData).then((data) => {
-              if (data.id) {
-                this.toClose();
-                this.message.success("保存成功", {
-                  duration: 1500,
-                  onAfterLeave: () => {
-                    this.fetchTableList();
-                  },
-                });
-              }
-            });
-          }
+          API_SAVE_DEPARTMENT(this.formData).then((data) => {
+            if (data.id) {
+              this.toClose();
+              this.message.success("保存成功", {
+                duration: 1000,
+                onAfterLeave: () => {
+                  this.fetchTableList();
+                },
+              });
+            }
+          });
         }
       });
     },

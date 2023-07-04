@@ -151,7 +151,10 @@ export default {
                 onClick: () => {
                   formData.id = record.id;
                   formData.name = record.name;
-                  formData.user_id = record.user_id;
+                  formData.gender = record.gender;
+                  formData.phone = record.phone;
+                  formData.email = record.email;
+                  formData.department_id = record.department_id;
                   visible.value = true;
                 },
               },
@@ -234,7 +237,7 @@ export default {
             if (data.id) {
               this.toClose();
               this.message.success("保存成功", {
-                duration: 1500,
+                duration: 1000,
                 onAfterLeave: () => {
                   this.fetchTableList();
                 },
