@@ -1,6 +1,6 @@
 import request from "../base";
 
-export function API_GET_DEPARTMENTLIST(data) {
+export function API_GET_DEPARTMENTS(data) {
   return request({ url: "/department/list", method: "POST", data });
 }
 

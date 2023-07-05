@@ -78,11 +78,14 @@ const dropdowns = ref([
 
 const router = useRouter();
 
-const onDropdownSelect = (key) => {
-  if (key === "ACCOUNT-CENTER") {
-    router.push({ name: "ACCOUNT-CENTER" });
-  }
-};
-
 const userStore = useUserStore();
+
+const onDropdownSelect = (key) => {
+  if (key === "SYSTEM-LOGOUT") {
+    userStore.removeToken();
+    userStore.removeUser();
+  }
+
+  router.push({ name: key });
+};
 </script>

@@ -14,10 +14,10 @@
     </n-card>
 
     <n-modal
-      :show="visible"
       preset="dialog"
       positive-text="保 存"
       negative-text="取 消"
+      :show="visible"
       :show-icon="false"
       :closable="false"
       :mask-closable="false"
@@ -95,8 +95,8 @@ import { h, reactive, ref } from "vue";
 import { NButton, NSpace, NTime, useMessage } from "naive-ui";
 import useIconRender from "@composables/icon";
 import { EditOutlined } from "@vicons/antd";
-import { API_GET_USERLIST, API_SAVE_USER } from "@services/user";
-import { API_GET_DEPARTMENTLIST } from "@services/department";
+import { API_GET_USERS, API_SAVE_USER } from "@services/user";
+import { API_GET_DEPARTMENTS } from "@services/department";
 
 export default {
   name: "CorpAccount",
@@ -208,7 +208,7 @@ export default {
   },
   methods: {
     initOptions() {
-      Promise.all([API_GET_DEPARTMENTLIST()]).then(([list]) => {
+      Promise.all([API_GET_DEPARTMENTS()]).then(([list]) => {
         this.options.departments = list.map((i) => ({
           label: i.name,
           value: i.id,
@@ -217,7 +217,7 @@ export default {
     },
     fetchTableList() {
       this.tableLoading = true;
-      API_GET_USERLIST()
+      API_GET_USERS()
         .then((list) => {
           this.tableData = list;
           this.tableLoading = false;

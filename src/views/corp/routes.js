@@ -1,9 +1,9 @@
 export default [
   {
     // 权限管理
-    path: "/corp/permissions",
-    name: "CORP-PERMISSION",
-    component: () => import("@views/corp/permission/index.vue"),
+    path: "/corp/roles-of-permissions",
+    name: "CORP-ROLES-AND-PERMISSIONS",
+    component: () => import("@views/corp/role-and-permission/index.vue"),
     meta: { layout: "basic" },
   },
   {

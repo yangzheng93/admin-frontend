@@ -1,10 +1,10 @@
 import request from "../base";
 
-export function API_GET_USERLIST(data) {
+export function API_GET_USERS(data) {
   return request({ url: "/user/list", method: "POST", data });
 }
 
-export function API_GET_USERSIMPLELIST(data) {
+export function API_GET_SIMPLE_USERS(data) {
   return request({ url: "/user/simple-list", method: "POST", data });
 }
 
