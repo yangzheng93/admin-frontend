@@ -93,7 +93,7 @@ export default {
           API_LOGIN({
             phone: this.formData.phone,
             password: this.formData.password,
-          }).then(({ token, user_id }) => {
+          }).then(({ token }) => {
             this.message.success("登录成功, 即将进入系统", {
               duration: 1000,
               onAfterLeave: () => {

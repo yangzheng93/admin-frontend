@@ -65,15 +65,10 @@
       <n-card :content-style="{ width: '600px' }">
         <n-tabs type="line">
           <n-tab-pane name="USER" tab="角色成员列表">
-            <UsersOfRole
-              :users-in-role="list.usersInRole"
-              :users="list.users"
-              :actived-role="activedRole"
-              @reload="initUsersInActivedRole"
-            />
+            <UsersOfRole :actived-role="activedRole" />
           </n-tab-pane>
           <n-tab-pane name="PERMISSION" tab="角色权限配置">
-            <PermissionsOfRole />
+            <PermissionsOfRole :actived-role="activedRole" />
           </n-tab-pane>
         </n-tabs>
       </n-card>
@@ -118,8 +113,6 @@ import { Medal } from "@vicons/fa";
 import UsersOfRole from "../components/UsersOfRole/index.vue";
 import PermissionsOfRole from "../components/PermissionsOfRole/index.vue";
 import { API_GET_ROLES, API_SAVE_ROLE } from "@services/role";
-import { API_GET_USERS_BY_ROLE } from "@services/user-role";
-import { API_GET_USERS } from "@services/user";
 
 export default {
   name: "CorpRoleOfPermission",
@@ -135,12 +128,16 @@ export default {
   setup() {
     const actived = ref("");
 
-    const list = reactive({ roles: [], users: [], usersInRole: [] });
+    const listOfRoles = ref([]);
+
+    const activedRole = computed(() => {
+      return listOfRoles.value.find((i) => i.name === actived.value);
+    });
 
     const keyword = ref("");
 
     const filtered = computed(() => {
-      return list.roles.filter(
+      return listOfRoles.value.filter(
         (i) => !keyword.value || i.name.includes(keyword.value),
       );
     });
@@ -149,44 +146,24 @@ export default {
 
     const formData = reactive({ name: "" });
 
-    const activedRole = computed(() => {
-      return list.roles.find((i) => i.name === actived.value);
-    });
-
     return {
       actived,
-      list,
+      listOfRoles,
+      activedRole,
       keyword,
       filtered,
       visible,
       formData,
-      activedRole,
     };
-  },
-  watch: {
-    actived() {
-      this.initUsersInActivedRole();
-    },
   },
   created() {
     this.initRoles();
-    this.initUsers();
   },
   methods: {
     initRoles() {
       API_GET_ROLES().then((list) => {
-        this.list.roles = list;
+        this.listOfRoles = list;
         this.actived = list[0].name;
-      });
-    },
-    initUsers() {
-      API_GET_USERS().then((list) => {
-        this.list.users = list;
-      });
-    },
-    initUsersInActivedRole() {
-      API_GET_USERS_BY_ROLE({ name: this.actived }).then((list) => {
-        this.list.usersInRole = list;
       });
     },
     toClose() {

@@ -10,7 +10,7 @@
         添加
       </n-button>
       <n-popconfirm
-        v-if="selections.length > 0"
+        v-if="removeds.length > 0"
         :show-icon="false"
         positive-text="确定"
         negative-text="取消"
@@ -26,22 +26,22 @@
               </template>
               移除
             </n-button>
-            （已选{{ selections.length }}人）
+            （已选{{ removeds.length }}人）
           </div>
         </template>
         从该角色中移除所有选中的用户？
       </n-popconfirm>
     </n-space>
     <n-space
-      v-if="usersInRole.length > 0"
+      v-if="list.usersInRole.length > 0"
       :size="16"
       vertical
       class="mt-[16px]"
     >
-      <n-checkbox-group v-model:value="selections">
+      <n-checkbox-group v-model:value="removeds">
         <n-space :size="12" vertical>
           <n-checkbox
-            v-for="item in usersInRole"
+            v-for="item in list.usersInRole"
             :key="item.user_role_id"
             :value="item.user_role_id"
             class="!items-center"
@@ -73,7 +73,7 @@
       :show-icon="false"
       :mask-closable="false"
       :close-on-esc="false"
-      :on-positive-click="toAddUser"
+      :on-positive-click="toUpsert"
       :on-negative-click="toClose"
       :on-close="toClose"
       class="n-dialog-border"
@@ -94,7 +94,7 @@
         <n-checkbox-group v-model:value="addeds">
           <n-space :size="12" vertical>
             <n-checkbox
-              v-for="item in usersByKeyword"
+              v-for="item in filteredByKeyword"
               :key="item.id"
               :value="item.id"
               class="!items-center"
@@ -116,7 +116,8 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, reactive, ref } from "vue";
+import { useMessage } from "naive-ui";
 import {
   MinusCircleOutlined,
   PlusOutlined,
@@ -125,26 +126,28 @@ import {
 import {
   API_UPSERT_USER_ROLE,
   API_REMOVE_USER_ROLE,
+  API_GET_USERS_BY_ROLE,
 } from "@services/user-role";
+import { API_GET_USERS } from "@services/user";
 
 export default {
   name: "UsersOfRole",
   components: { MinusCircleOutlined, PlusOutlined, SearchOutlined },
   props: {
-    users: { type: Array, default: () => [] },
-    usersInRole: { type: Array, default: () => [] },
     activedRole: { type: Object, default: () => {} },
   },
   emits: ["reload"],
-  setup(props) {
+  setup() {
+    const message = useMessage();
     const visible = ref(false);
-    const selections = ref([]);
+    const list = reactive({ users: [], usersInRole: [] });
+    const removeds = ref([]);
     const keyword = ref("");
     const addeds = ref([]);
 
-    const usersByKeyword = computed(() => {
+    const filteredByKeyword = computed(() => {
       if (keyword.value) {
-        return props.users.filter((i) => {
+        return list.users.filter((i) => {
           return (
             i.name.includes(keyword.value) ||
             i.department_name.includes(keyword.value)
@@ -152,31 +155,56 @@ export default {
         });
       }
 
-      return props.users;
+      return list.users;
     });
 
     return {
+      message,
       visible,
-      selections,
+      list,
+      removeds,
       keyword,
       addeds,
-      usersByKeyword,
+      filteredByKeyword,
     };
   },
-  created() {},
+  watch: {
+    activedRole: {
+      handler() {
+        this.initUsersOfCurRole();
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+  created() {
+    this.initUsers();
+  },
   methods: {
+    initUsers() {
+      API_GET_USERS().then((list) => {
+        this.list.users = list;
+      });
+    },
+    initUsersOfCurRole() {
+      if (this.activedRole?.id) {
+        API_GET_USERS_BY_ROLE({ id: this.activedRole.id }).then((list) => {
+          this.list.usersInRole = list;
+        });
+      }
+    },
     onConfirmToRemove() {
-      API_REMOVE_USER_ROLE({ ids: this.selections }).then(() => {
-        this.selections = [];
-        this.$emit("reload");
+      API_REMOVE_USER_ROLE({ ids: this.removeds }).then(() => {
+        this.removeds = [];
+        this.initUsersOfCurRole();
       });
     },
     toClose() {
       this.addeds = [];
       this.visible = false;
     },
-    toAddUser() {
-      const maps = this.usersInRole.reduce((a, b) => {
+    toUpsert() {
+      const maps = this.list.usersInRole.reduce((a, b) => {
         // user_role 已经存在的关系
         return { ...a, [b.user_id]: b.user_role_id };
       }, {});
@@ -190,8 +218,9 @@ export default {
           };
         }),
       }).then(() => {
+        this.message.success("保存成功");
         this.toClose();
-        this.$emit("reload");
+        this.initUsersOfCurRole();
       });
     },
   },
