@@ -10,7 +10,6 @@
 import { computed, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "@stores/user";
-// import { usePermissionStore } from "@stores/permission";
 
 export default {
   name: "App",
@@ -18,7 +17,6 @@ export default {
     const route = useRoute();
     const layout = computed(() => route.meta.layout || "basic");
     const userStore = useUserStore();
-    // const permissionStore = usePermissionStore();
 
     return {
       userStore,
@@ -34,16 +32,12 @@ export default {
     "userStore.token"(v) {
       if (v) {
         this.userStore.fetchCurUser();
-        // this.permissionStore.fetchPermissions();
-        // this.permissionStore.fethcRoleOfPermissions();
       }
     },
   },
   created() {
     if (this.userStore.token) {
       this.userStore.fetchCurUser();
-      // this.permissionStore.fetchPermissions();
-      // this.permissionStore.fethcRoleOfPermissions();
     }
   },
 };

@@ -93,7 +93,7 @@ export default {
         this.list.permissions = list;
 
         if (this.activedRole?.id) {
-          API_GET_PERMISSIONS_OF_ROLE({ id: this.activedRole.id }).then(
+          API_GET_PERMISSIONS_OF_ROLE({ role_ids: [this.activedRole.id] }).then(
             (list) => {
               this.list.permissionsInRole = list;
               this.selections = list.map((i) => i.permission_id);

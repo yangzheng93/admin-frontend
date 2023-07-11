@@ -1,18 +1,16 @@
 <template>
-  <div class="home-workbench">
-    所有的权限：{{ permissionStore.myPermissions }}
-  </div>
+  <div class="home-workbench">所有的权限: {{ userStore.user.permissions }}</div>
 </template>
 
 <script>
-import { usePermissionStore } from "@stores/permission";
+import { useUserStore } from "@stores/user";
 
 export default {
   name: "DashboardWorkbench",
   setup() {
-    const permissionStore = usePermissionStore();
+    const userStore = useUserStore();
 
-    return { permissionStore };
+    return { userStore };
   },
 };
 </script>
