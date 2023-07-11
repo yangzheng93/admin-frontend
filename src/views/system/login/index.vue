@@ -65,7 +65,7 @@ import { LockOutlined, UserOutlined } from "@vicons/antd";
 import { useMessage } from "naive-ui";
 import { useUserStore } from "@stores/user";
 import { API_LOGIN } from "@services/auth";
-import { routerKey } from "vue-router";
+import { API_GET_USERINFO } from "@services/user";
 
 export default {
   name: "SystemLogin",
@@ -93,12 +93,11 @@ export default {
           API_LOGIN({
             phone: this.formData.phone,
             password: this.formData.password,
-          }).then(({ token, user }) => {
-            this.message.success("登录成功", {
+          }).then(({ token, user_id }) => {
+            this.message.success("登录成功, 即将进入系统", {
               duration: 1000,
               onAfterLeave: () => {
                 this.userStore.setToken(token);
-                this.userStore.setUser(user);
                 this.$router.push({ name: "HOME-WORKBENCH" });
               },
             });

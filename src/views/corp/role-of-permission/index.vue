@@ -25,7 +25,7 @@
             <li
               v-for="i in filtered"
               :key="i.id"
-              :class="`flex h-[40px] cursor-pointer items-center justify-between rounded-[2px] pl-[12px]  ${
+              :class="`flex h-[40px] cursor-pointer items-center justify-between rounded-[2px] pl-[12px] ${
                 actived === i.name ? 'bg-[#f7f7f7]' : ''
               }`"
               @click="() => (actived = i.name)"
@@ -64,13 +64,16 @@
       </n-card>
       <n-card :content-style="{ width: '600px' }">
         <n-tabs type="line">
-          <n-tab-pane name="USER" tab="角色成员管理">
-            <n-spin :show="loading">
-              <TabRoleUser :users="list.users" />
-            </n-spin>
+          <n-tab-pane name="USER" tab="角色成员列表">
+            <UsersOfRole
+              :users-in-role="list.usersInRole"
+              :users="list.users"
+              :actived-role="activedRole"
+              @reload="initUsersInActivedRole"
+            />
           </n-tab-pane>
           <n-tab-pane name="PERMISSION" tab="角色权限配置">
-            Hey Jude
+            <PermissionsOfRole />
           </n-tab-pane>
         </n-tabs>
       </n-card>
@@ -112,24 +115,27 @@ import {
   UserOutlined,
 } from "@vicons/antd";
 import { Medal } from "@vicons/fa";
-import TabRoleUser from "../components/TabRoleUser/index.vue";
+import UsersOfRole from "../components/UsersOfRole/index.vue";
+import PermissionsOfRole from "../components/PermissionsOfRole/index.vue";
 import { API_GET_ROLES, API_SAVE_ROLE } from "@services/role";
 import { API_GET_USERS_BY_ROLE } from "@services/user-role";
+import { API_GET_USERS } from "@services/user";
 
 export default {
-  name: "CorpRoleAndPermission",
+  name: "CorpRoleOfPermission",
   components: {
     CrownOutlined,
     PlusOutlined,
     SearchOutlined,
     UserOutlined,
     Medal,
-    TabRoleUser,
+    UsersOfRole,
+    PermissionsOfRole,
   },
   setup() {
     const actived = ref("");
 
-    const list = reactive({ roles: [], users: [] });
+    const list = reactive({ roles: [], users: [], usersInRole: [] });
 
     const keyword = ref("");
 
@@ -143,17 +149,28 @@ export default {
 
     const formData = reactive({ name: "" });
 
-    const loading = ref(false);
+    const activedRole = computed(() => {
+      return list.roles.find((i) => i.name === actived.value);
+    });
 
-    return { actived, list, keyword, filtered, visible, formData, loading };
+    return {
+      actived,
+      list,
+      keyword,
+      filtered,
+      visible,
+      formData,
+      activedRole,
+    };
   },
   watch: {
     actived() {
-      this.initUsersByRole();
+      this.initUsersInActivedRole();
     },
   },
   created() {
     this.initRoles();
+    this.initUsers();
   },
   methods: {
     initRoles() {
@@ -162,16 +179,15 @@ export default {
         this.actived = list[0].name;
       });
     },
-    initUsersByRole() {
-      this.loading = true;
-      API_GET_USERS_BY_ROLE({ name: this.actived })
-        .then((list) => {
-          this.list.users = list;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
-        });
+    initUsers() {
+      API_GET_USERS().then((list) => {
+        this.list.users = list;
+      });
+    },
+    initUsersInActivedRole() {
+      API_GET_USERS_BY_ROLE({ name: this.actived }).then((list) => {
+        this.list.usersInRole = list;
+      });
     },
     toClose() {
       this.visible = false;

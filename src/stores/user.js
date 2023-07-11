@@ -2,20 +2,21 @@
 
 import { defineStore } from "pinia";
 import { getFromCookie, setToCookie, removeFromCookie } from "@utils/uCookies";
-import {
-  getObjFromStorage,
-  setObjToStorage,
-  removeFromStorage,
-} from "@utils/uLocalStorage";
+import { API_GET_CURUSERINFO } from "@services/user";
+// import {
+//   getObjFromStorage,
+//   setObjToStorage,
+//   removeFromStorage,
+// } from "@utils/uLocalStorage";
 
 const TOKEN_KEY = "MESADMIN_TOKEN";
-const USERINFO_KEY = "MESADMIN_USERINFO";
+// const USERINFO_KEY = "MESADMIN_USERINFO";
 
 export const useUserStore = defineStore("UserStore", {
   id: "UserInfo",
   state: () => ({
     token: getFromCookie(TOKEN_KEY),
-    user: getObjFromStorage(USERINFO_KEY),
+    user: undefined,
   }),
   actions: {
     setToken(v) {
@@ -28,11 +29,12 @@ export const useUserStore = defineStore("UserStore", {
     },
     setUser(v) {
       this.user = v;
-      setObjToStorage(USERINFO_KEY, v);
     },
     removeUser() {
       this.user = undefined;
-      removeFromStorage(USERINFO_KEY);
+    },
+    async fetchCurUser() {
+      this.user = await API_GET_CURUSERINFO();
     },
   },
 });

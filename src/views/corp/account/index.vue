@@ -5,7 +5,7 @@
         <n-button type="primary" @click="visible = true">新 建</n-button>
       </n-space>
       <n-data-table
-        :loading="tableLoading"
+        :loading="loading"
         :columns="tableColumns"
         :data="tableData"
         :single-line="false"
@@ -105,7 +105,7 @@ export default {
 
     const visible = ref(false);
 
-    const tableLoading = ref(false);
+    const loading = ref(false);
 
     const tableColumns = ref([
       {
@@ -193,7 +193,7 @@ export default {
     return {
       message,
       visible,
-      tableLoading,
+      loading,
       tableColumns,
       tableData,
       options,
@@ -202,28 +202,34 @@ export default {
       resetFormData,
     };
   },
+  watch: {
+    visible(v) {
+      if (v) {
+        this.initOptions();
+      }
+    },
+  },
   created() {
-    this.initOptions();
     this.fetchTableList();
   },
   methods: {
     initOptions() {
-      Promise.all([API_GET_DEPARTMENTS()]).then(([list]) => {
-        this.options.departments = list.map((i) => ({
+      Promise.all([API_GET_DEPARTMENTS()]).then(([departments, roles]) => {
+        this.options.departments = departments.map((i) => ({
           label: i.name,
           value: i.id,
         }));
       });
     },
     fetchTableList() {
-      this.tableLoading = true;
+      this.loading = true;
       API_GET_USERS()
         .then((list) => {
           this.tableData = list;
-          this.tableLoading = false;
+          this.loading = false;
         })
         .catch(() => {
-          this.tableLoading = false;
+          this.loading = false;
         });
     },
     toClose() {

@@ -38,13 +38,24 @@ body {
   }
 }
 
-// .n-dialog {
-//   padding: 20px 28px !important;
+.n-dialog.n-dialog-border {
+  padding: 0 !important;
 
-//   .n-dialog__content {
-//     margin: 20px 0 !important;
-//   }
-// }
+  .n-dialog__title {
+    padding: 16px 28px 16px;
+  }
+
+  .n-dialog__content {
+    margin: 0 !important;
+    padding: 16px 28px 16px;
+    border-bottom: 1px solid #e0e0e6;
+    border-top: 1px solid #e0e0e6;
+  }
+
+  .n-dialog__action {
+    padding: 16px 28px 16px;
+  }
+}
 
 .n-button-group--vertical {
   .n-button.n-button--actived {

@@ -46,10 +46,10 @@ const menus = ref([
     children: [
       {
         label: useRouterRender(
-          { to: { name: "CORP-PERMISSION" } },
+          { to: { name: "CORP-ROLES-AND-PERMISSIONS" } },
           "角色与权限",
         ),
-        key: "CORP-PERMISSION",
+        key: "CORP-ROLES-AND-PERMISSIONS",
         icon: useIconRender(ShieldAlt),
       },
       {
