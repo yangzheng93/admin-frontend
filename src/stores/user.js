@@ -1,8 +1,8 @@
 /** @format */
 
 import { defineStore } from "pinia";
-import { getFromCookie, setToCookie, removeFromCookie } from "@utils/uCookies";
 import { API_GET_CURUSERINFO } from "@services/user";
+import { getFromCookie, setToCookie, removeFromCookie } from "@utils/uCookies";
 // import {
 //   getObjFromStorage,
 //   setObjToStorage,

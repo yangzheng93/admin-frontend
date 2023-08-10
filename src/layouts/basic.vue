@@ -1,21 +1,16 @@
 <template>
   <n-layout has-sider class="h-full">
-    <n-layout-sider
-      bordered
-      default-collapsed
-      show-trigger
-      collapse-mode="width"
-    >
-      <n-menu :options="menus" />
+    <n-layout-sider bordered show-trigger collapse-mode="width">
+      <n-menu default-expand-all :options="menus" />
     </n-layout-sider>
     <n-layout>
       <n-layout-header bordered class="h-[64px] pl-[20px] pr-[20px]">
         <n-space align="center" justify="space-between" class="h-full w-full">
-          <HeaderBrand />
+          <Brand />
           <n-space :size="18" align="center">
             <MessageCenter />
             <n-divider vertical class="!m-0 !h-[28px]" />
-            <HeaderUserAvatar />
+            <UserAvatar />
           </n-space>
         </n-space>
       </n-layout-header>
@@ -30,13 +25,13 @@
 
 <script setup>
 import { ref } from "vue";
-import HeaderBrand from "./components/Brand/index.vue";
-import HeaderUserAvatar from "./components/UserAvatar/index.vue";
+import Brand from "./components/Brand/index.vue";
+import UserAvatar from "./components/UserAvatar/index.vue";
 import MessageCenter from "./components/MessageCenter/index.vue";
 import useIconRender from "@composables/icon";
 import useRouterRender from "@composables/router";
 import { AddressCard, Cogs, ShieldAlt, Users } from "@vicons/fa";
-import { ApartmentOutlined } from "@vicons/antd";
+import { ApartmentOutlined, FileFilled } from "@vicons/antd";
 
 const menus = ref([
   {
@@ -78,6 +73,11 @@ const menus = ref([
         icon: useIconRender(Users),
       },
     ],
+  },
+  {
+    label: useRouterRender({ to: { name: "HOME-TEMPLATE" } }, "文件模板管理"),
+    key: "HOME-TEMPLATE",
+    icon: useIconRender(FileFilled),
   },
 ]);
 </script>

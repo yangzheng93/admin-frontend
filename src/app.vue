@@ -20,7 +20,6 @@ export default {
 
     return {
       userStore,
-      // permissionStore,
       layout,
       layouts: {
         basic: defineAsyncComponent(() => import("@layouts/basic.vue")),

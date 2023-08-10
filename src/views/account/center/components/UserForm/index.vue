@@ -104,7 +104,7 @@ const toSave = () => {
             duration: 1500,
             onAfterLeave: () => {
               userStore.setUser(
-                Object.assign(userStore.user, {
+                Object.assign(user, {
                   name: formData.name,
                   phone: formData.phone,
                 }),

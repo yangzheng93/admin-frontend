@@ -12,6 +12,10 @@ export function API_SAVE_USER(data) {
   return request({ url: "/user/save", method: "POST", data });
 }
 
+export function API_BULK_IMPORT_USER(data) {
+  return request({ url: "/user/bulk-import", method: "POST", data });
+}
+
 export function API_GET_USERINFO(params) {
   return request({ url: "/user/find-one", method: "GET", params });
 }

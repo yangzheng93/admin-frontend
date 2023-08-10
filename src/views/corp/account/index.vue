@@ -1,7 +1,10 @@
 <template>
   <div class="corp-account">
     <n-card>
-      <n-space justify="end" class="mb-[20px]">
+      <n-space :size="20" justify="end" class="mb-[20px]">
+        <n-upload :show-file-list="false" :custom-request="doCustomRequest">
+          <n-button type="primary">批量导入</n-button>
+        </n-upload>
         <n-button type="primary" @click="visible = true">新 建</n-button>
       </n-space>
       <n-data-table
@@ -95,7 +98,11 @@ import { h, reactive, ref } from "vue";
 import { NButton, NSpace, NTime, useMessage } from "naive-ui";
 import useIconRender from "@composables/icon";
 import { EditOutlined } from "@vicons/antd";
-import { API_GET_USERS, API_SAVE_USER } from "@services/user";
+import {
+  API_GET_USERS,
+  API_SAVE_USER,
+  API_BULK_IMPORT_USER,
+} from "@services/user";
 import { API_GET_DEPARTMENTS } from "@services/department";
 
 export default {
@@ -202,26 +209,20 @@ export default {
       resetFormData,
     };
   },
-  watch: {
-    visible(v) {
-      if (v) {
-        this.initOptions();
-      }
-    },
-  },
   created() {
-    this.fetchTableList();
+    this.initDepartments();
+    this.initTableList();
   },
   methods: {
-    initOptions() {
-      Promise.all([API_GET_DEPARTMENTS()]).then(([departments, roles]) => {
+    initDepartments() {
+      API_GET_DEPARTMENTS().then((departments) => {
         this.options.departments = departments.map((i) => ({
           label: i.name,
           value: i.id,
         }));
       });
     },
-    fetchTableList() {
+    initTableList() {
       this.loading = true;
       API_GET_USERS()
         .then((list) => {
@@ -243,15 +244,32 @@ export default {
             if (data.id) {
               this.toClose();
               this.message.success("保存成功", {
-                duration: 1000,
+                duration: 1500,
                 onAfterLeave: () => {
-                  this.fetchTableList();
+                  this.initTableList();
                 },
               });
             }
           });
         }
       });
+    },
+    doCustomRequest({ file, onFinish, onError }) {
+      const formData = new FormData();
+      formData.append("file", file.file);
+      API_BULK_IMPORT_USER(formData)
+        .then(() => {
+          this.message.success("导入成功", {
+            duration: 1500,
+            onAfterLeave: () => {
+              this.initTableList();
+            },
+          });
+          onFinish();
+        })
+        .catch(() => {
+          onError();
+        });
     },
   },
 };

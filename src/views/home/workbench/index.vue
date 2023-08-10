@@ -6,7 +6,7 @@
 import { useUserStore } from "@stores/user";
 
 export default {
-  name: "DashboardWorkbench",
+  name: "HomeWorkbench",
   setup() {
     const userStore = useUserStore();
 

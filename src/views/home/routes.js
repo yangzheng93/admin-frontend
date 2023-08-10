@@ -5,4 +5,10 @@ export default [
     component: () => import("@views/home/workbench/index.vue"),
     meta: { layout: "basic" },
   },
+  {
+    path: "/home/templates",
+    name: "HOME-TEMPLATE",
+    component: () => import("@views/home/template/index.vue"),
+    meta: { layout: "basic" },
+  },
 ];

@@ -190,7 +190,7 @@ export default {
             if (data.id) {
               this.toClose();
               this.message.success("保存成功", {
-                duration: 1000,
+                duration: 1500,
                 onAfterLeave: () => {
                   this.fetchTableList();
                 },

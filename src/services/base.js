@@ -57,7 +57,7 @@ service.interceptors.response.use(
         router.push({ name: "SYSTEM-LOGIN" });
         break;
       default:
-        NMessage.error(
+        showDialog(
           Array.isArray(message) ? message?.[0] : message || "请求失败",
         );
         break;
