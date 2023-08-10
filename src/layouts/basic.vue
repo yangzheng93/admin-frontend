@@ -30,9 +30,9 @@
 
 <script setup>
 import { ref } from "vue";
-import HeaderBrand from "@components/Header/Brand/index.vue";
-import HeaderUserAvatar from "@components/Header/UserAvatar/index.vue";
-import MessageCenter from "@components/Header/MessageCenter/index.vue";
+import HeaderBrand from "./components/Brand/index.vue";
+import HeaderUserAvatar from "./components/UserAvatar/index.vue";
+import MessageCenter from "./components/MessageCenter/index.vue";
 import useIconRender from "@composables/icon";
 import useRouterRender from "@composables/router";
 import { AddressCard, Cogs, ShieldAlt, Users } from "@vicons/fa";

@@ -77,7 +77,7 @@ export default {
 
     const formRef = ref(null);
 
-    const formData = reactive({ phone: "18721393486", password: "888888" });
+    const formData = reactive({ phone: "13812341234", password: "888888" });
 
     return { message, userStore, formRef, formData };
   },
